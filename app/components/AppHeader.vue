@@ -37,21 +37,15 @@ nuxtApp.hooks.hookOnce('page:finish', () => {
 <template>
   <UHeader :links="links">
     <template #logo>
-      Nuxt UI Pro <UBadge
-        label="Landing"
-        variant="subtle"
-        class="mb-0.5"
-      />
+      <div class="flex items-center gap-2">
+        <img src="/logo.png" alt="Bed & Breakfast" class="h-10" />
+        <UBadge label="Web3" variant="subtle" class="mb-0.5" />
+      </div>
     </template>
 
     <template #right>
-      <UButton
-        label="Sign in"
-        color="white"
-        variant="ghost"
-        trailing-icon="i-heroicons-arrow-right-20-solid"
-        class="hidden lg:flex"
-      />
+      <UButton label="Sign in" color="white" variant="ghost" trailing-icon="i-heroicons-arrow-right-20-solid"
+        class="hidden lg:flex" />
     </template>
 
     <template #panel>
@@ -59,16 +53,8 @@ nuxtApp.hooks.hookOnce('page:finish', () => {
 
       <UDivider class="my-6" />
 
-      <UButton
-        label="Sign in"
-        color="white"
-        block
-        class="mb-3"
-      />
-      <UButton
-        label="Get started"
-        block
-      />
+      <UButton label="Sign in" color="white" block class="mb-3" />
+      <UButton label="Get started" block />
     </template>
   </UHeader>
 </template>

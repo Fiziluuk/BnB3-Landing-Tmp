@@ -1,24 +1,25 @@
-title: Nuxt UI Pro - Landing template
-description: Nuxt UI Pro is a collection of premium Vue components built on top of Nuxt UI to create beautiful & responsive Nuxt applications in minutes.
+title: Bed & Breakfast
+titleBadge: Web3
+description: BnB3 is a place to book a bed & breakfast via Web3.
 hero:
-  title: Build your landing in seconds
-  description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
+  title: Book a Bed & Breakfast via Web3
+  description: Do not need any Fiat Currency, just use your crypto token.
   headline:
-    label: Made with Nuxt UI Pro
-    to: https://ui.nuxt.com/pro
+    label: Crafted by Productathon.online
+    to: https://Productathon.online
     icon: i-heroicons-arrow-top-right-on-square-20-solid
   links:
-    - label: Get started
+    - label: Booking now
       icon: i-heroicons-arrow-right-20-solid
       trailing: true
-      to: '#features'
+      to: "/booking"
       size: xl
-    - label: Use this template
-      icon: i-simple-icons-github
+    - label: List your Bed & Breakfast
+      icon: material-symbols:add-2
       size: xl
       color: gray
-      to: https://github.com/nuxt-ui-pro/landing
-      target: _blank
+      to: "/booking/submit"
+landingImg: /assets/landing.jpg
 logos:
   title: Trusted by the world's best
   icons:

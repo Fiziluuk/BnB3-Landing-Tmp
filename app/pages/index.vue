@@ -45,7 +45,8 @@ useSeoMeta({
         </UBadge>
       </template>
 
-      <ImagePlaceholder />
+      <img v-if="page.landingImg" :src="page.landingImg" class="h-full w-full object-cover object-center rounded-xl" />
+      <ImagePlaceholder v-else />
 
       <ULandingLogos
         :title="page.logos.title"
