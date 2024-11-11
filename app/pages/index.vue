@@ -1,12 +1,45 @@
 <script setup lang="ts">
-const { data: page } = await useAsyncData('index', () => queryContent('/').findOne())
+import { useMotion } from "@vueuse/motion";
 
+const { data: page } = await useAsyncData("index", () =>
+  queryContent("/").findOne()
+);
+
+const contentRef = ref();
+const { variant } = useMotion(contentRef, {
+  initial: {
+    x: 100,
+    opacity: 0,
+  },
+  enter: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      type: "spring",
+      stiffness: 350,
+      damping: 20,
+      delay: 1000,
+      onComplete: () => {
+        variant.value = "levitate";
+      },
+    },
+  },
+  levitate: {
+    x: 40,
+    transition: {
+      duration: 2000,
+      repeat: Infinity,
+      ease: "easeInOut",
+      repeatType: "mirror",
+    },
+  },
+});
 useSeoMeta({
   title: page.value.title,
   ogTitle: page.value.title,
   description: page.value.description,
   ogDescription: page.value.description
-})
+});
 </script>
 
 <template>
@@ -18,6 +51,7 @@ useSeoMeta({
     >
       <template #headline>
         <UBadge
+          ref="contentRef"
           v-if="page.hero.headline"
           variant="subtle"
           size="lg"
@@ -29,10 +63,7 @@ useSeoMeta({
             class="focus:outline-none"
             tabindex="-1"
           >
-            <span
-              class="absolute inset-0"
-              aria-hidden="true"
-            />
+            <span class="absolute inset-0" aria-hidden="true" />
           </NuxtLink>
 
           {{ page.hero.headline.label }}
@@ -45,13 +76,14 @@ useSeoMeta({
         </UBadge>
       </template>
 
-      <img v-if="page.landingImg" :src="page.landingImg" class="h-full w-full object-cover object-center rounded-xl" />
+      <img
+        v-if="page.landingImg"
+        :src="page.landingImg"
+        class="h-full w-full object-cover object-center rounded-xl"
+      />
       <ImagePlaceholder v-else />
 
-      <ULandingLogos
-        :title="page.logos.title"
-        align="center"
-      >
+      <ULandingLogos :title="page.logos.title" align="center">
         <UIcon
           v-for="icon in page.logos.icons"
           :key="icon"
@@ -115,11 +147,10 @@ useSeoMeta({
       </UPageColumns>
     </ULandingSection>
 
-    <ULandingSection class="bg-primary-50 dark:bg-primary-400 dark:bg-opacity-10">
-      <ULandingCTA
-        v-bind="page.cta"
-        :card="false"
-      />
+    <ULandingSection
+      class="bg-primary-50 dark:bg-primary-400 dark:bg-opacity-10"
+    >
+      <ULandingCTA v-bind="page.cta" :card="false" />
     </ULandingSection>
 
     <ULandingSection
@@ -135,9 +166,9 @@ useSeoMeta({
           button: {
             label: 'font-semibold',
             trailingIcon: {
-              base: 'w-6 h-6'
-            }
-          }
+              base: 'w-6 h-6',
+            },
+          },
         }"
         class="max-w-4xl mx-auto"
       />
