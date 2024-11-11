@@ -1,57 +1,56 @@
 <script setup lang="ts">
 import { useMotion } from "@vueuse/motion";
+import './index.css'
 
 const { data: page } = await useAsyncData("index", () =>
   queryContent("/").findOne()
 );
 
-const contentRef = ref();
-const { variant } = useMotion(contentRef, {
-  initial: {
-    x: 100,
-    opacity: 0,
-  },
-  enter: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      type: "spring",
-      stiffness: 350,
-      damping: 20,
-      delay: 1000,
-      onComplete: () => {
-        variant.value = "levitate";
+const customersRef = ref();
+const mainRef = ref();
+
+(function () {
+  const { variant } = useMotion(customersRef, {
+    initial: {
+      x: 0,
+      opacity: 1,
+    },
+    enter: {
+      x: -20,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        duration: 2000,
+        onComplete: () => {
+          variant.value = "levitate";
+        },
       },
     },
-  },
-  levitate: {
-    x: 40,
-    transition: {
-      duration: 2000,
-      repeat: Infinity,
-      ease: "easeInOut",
-      repeatType: "mirror",
+    levitate: {
+      x: 20,
+      opacity: 1,
+      transition: {
+        duration: 2000,
+        repeat: Infinity,
+        repeatType: "mirror",
+      },
     },
-  },
-});
+  });
+})();
+
 useSeoMeta({
   title: page.value.title,
   ogTitle: page.value.title,
   description: page.value.description,
-  ogDescription: page.value.description
+  ogDescription: page.value.description,
 });
 </script>
 
 <template>
   <div>
-    <ULandingHero
-      :title="page.hero.title"
-      :description="page.hero.description"
-      :links="page.hero.links"
-    >
+    <ULandingHero :description="page.hero.description" :links="page.hero.links">
       <template #headline>
         <UBadge
-          ref="contentRef"
           v-if="page.hero.headline"
           variant="subtle"
           size="lg"
@@ -74,6 +73,9 @@ useSeoMeta({
             class="ml-1 w-4 h-4 pointer-events-none"
           />
         </UBadge>
+        <div class="text-7xl font-bold text-black pt-12 typing">
+          {{ page.hero.title }}
+        </div>
       </template>
 
       <img
@@ -83,17 +85,29 @@ useSeoMeta({
       />
       <ImagePlaceholder v-else />
 
-      <ULandingLogos :title="page.logos.title" align="center">
+      <!-- <ULandingLogos :title="page.logos.title" align="center" ref="contentRef">
         <UIcon
           v-for="icon in page.logos.icons"
           :key="icon"
           :name="icon"
           class="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 text-gray-900 dark:text-white"
         />
-      </ULandingLogos>
+      </ULandingLogos> -->
+      <div class="pt-2">
+        <div class="text-center font-black text-lg">{{ page.logos.title }}</div>
+        <ULandingLogos align="center" ref="customersRef">
+          <UIcon
+            v-for="icon in page.logos.icons"
+            :key="icon"
+            :name="icon"
+            class="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 text-gray-900 dark:text-white"
+          />
+        </ULandingLogos>
+      </div>
     </ULandingHero>
 
     <ULandingSection
+      v-motion-pop-visible
       :title="page.features.title"
       :description="page.features.description"
       :headline="page.features.headline"
@@ -111,6 +125,7 @@ useSeoMeta({
     </ULandingSection>
 
     <ULandingSection
+      v-motion-slide-visible-left
       :title="page.pricing.title"
       :description="page.pricing.description"
       :headline="page.pricing.headline"
@@ -129,6 +144,7 @@ useSeoMeta({
     </ULandingSection>
 
     <ULandingSection
+      v-motion-slide-visible-right
       :headline="page.testimonials.headline"
       :title="page.testimonials.title"
       :description="page.testimonials.description"
@@ -148,12 +164,14 @@ useSeoMeta({
     </ULandingSection>
 
     <ULandingSection
+      v-motion-slide-visible-left
       class="bg-primary-50 dark:bg-primary-400 dark:bg-opacity-10"
     >
       <ULandingCTA v-bind="page.cta" :card="false" />
     </ULandingSection>
 
     <ULandingSection
+      v-motion-slide-visible-right
       id="faq"
       :title="page.faq.title"
       :description="page.faq.description"
