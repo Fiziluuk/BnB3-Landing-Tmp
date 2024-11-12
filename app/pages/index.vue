@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useMotion } from "@vueuse/motion";
-import './index.css'
 
 const { data: page } = await useAsyncData("index", () =>
   queryContent("/").findOne()
 );
+
+const wordArr = ["Bed", "Breakfast", "Bed & Breakfast"];
 
 const customersRef = ref();
 const mainRef = ref();
@@ -73,11 +74,20 @@ useSeoMeta({
             class="ml-1 w-4 h-4 pointer-events-none"
           />
         </UBadge>
-        <div class="text-7xl font-bold text-black pt-12 typing">
-          {{ page.hero.title }}
+        <div class="flex justify-center pt-12">
+          <div>
+            <span class="text-7xl font-bold text-black">
+              <VueWriter :array="wordArr" />
+            </span>
+          </div>
+
+          <div>
+            <span class="text-7xl font-bold text-black">
+              {{ page.hero.title }}
+            </span>
+          </div>
         </div>
       </template>
-
       <img
         v-if="page.landingImg"
         :src="page.landingImg"
@@ -85,14 +95,6 @@ useSeoMeta({
       />
       <ImagePlaceholder v-else />
 
-      <!-- <ULandingLogos :title="page.logos.title" align="center" ref="contentRef">
-        <UIcon
-          v-for="icon in page.logos.icons"
-          :key="icon"
-          :name="icon"
-          class="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 text-gray-900 dark:text-white"
-        />
-      </ULandingLogos> -->
       <div class="pt-2">
         <div class="text-center font-black text-lg">{{ page.logos.title }}</div>
         <ULandingLogos align="center" ref="customersRef">
