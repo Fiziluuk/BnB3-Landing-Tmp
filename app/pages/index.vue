@@ -8,7 +8,7 @@ const { data: page } = await useAsyncData("index", () =>
 const wordArr = ["Bed", "Breakfast", "Bed & Breakfast"];
 
 const customersRef = ref();
-const mainRef = ref();
+const imgRef = ref();
 
 (function () {
   const { variant } = useMotion(customersRef, {
@@ -72,6 +72,7 @@ useSeoMeta({
             v-if="page.hero.headline.icon"
             :name="page.hero.headline.icon"
             class="ml-1 w-4 h-4 pointer-events-none"
+            ref="imgRef"
           />
         </UBadge>
         <div class="flex justify-center pt-12">
@@ -89,21 +90,39 @@ useSeoMeta({
         </div>
       </template>
       <img
+        ref="imgRef"
         v-if="page.landingImg"
         :src="page.landingImg"
-        class="h-full w-full object-cover object-center rounded-xl"
+        class="h-full w-full object-cover object-center rounded-xl z-999"
       />
       <ImagePlaceholder v-else />
 
       <div class="pt-2">
         <div class="text-center font-black text-lg">{{ page.logos.title }}</div>
-        <ULandingLogos align="center" ref="customersRef">
+        <ULandingLogos align="center">
+          <div
+            v-for="(icon,index) in page.logos.icons"
+            v-motion
+            :delay= "400 * index"
+            :initial="{
+              opacity: 0,
+              y: -230,
+            }" 
+            :visible="{
+              opacity: 1,
+              y: 0,
+              transition: {
+                repeatType: 'loop',
+                repeatDelay: 5000
+              },
+            }"
+          >
           <UIcon
-            v-for="icon in page.logos.icons"
             :key="icon"
-            :name="icon"
+            :name="icon" 
             class="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 text-gray-900 dark:text-white"
           />
+        </div>
         </ULandingLogos>
       </div>
     </ULandingHero>
