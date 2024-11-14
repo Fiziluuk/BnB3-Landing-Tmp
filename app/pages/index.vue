@@ -8,7 +8,7 @@ const { data: page } = await useAsyncData("index", () =>
 const wordArr = ["Bed", "Breakfast", "Bed & Breakfast"];
 
 const customersRef = ref();
-const imgRef = ref();
+const ctaRef = ref();
 
 (function () {
   const { variant } = useMotion(customersRef, {
@@ -72,7 +72,6 @@ useSeoMeta({
             v-if="page.hero.headline.icon"
             :name="page.hero.headline.icon"
             class="ml-1 w-4 h-4 pointer-events-none"
-            ref="imgRef"
           />
         </UBadge>
         <div class="flex justify-center pt-12">
@@ -90,7 +89,7 @@ useSeoMeta({
         </div>
       </template>
       <img
-        ref="imgRef"
+        v-motion-pop-visible
         v-if="page.landingImg"
         :src="page.landingImg"
         class="h-full w-full object-cover object-center rounded-xl z-999"
@@ -106,7 +105,7 @@ useSeoMeta({
             :delay= "400 * index"
             :initial="{
               opacity: 0,
-              y: -230,
+              y: -90,
             }" 
             :visible="{
               opacity: 1,
@@ -141,12 +140,24 @@ useSeoMeta({
           v-for="(item, index) in page.features.items"
           :key="index"
           v-bind="item"
+          v-motion
+          :delay= "200 * index"
+          :initial="{
+            opacity: 0,
+            y: index < 3 ? -30 : 30,
+          }" 
+          :visible="{
+            opacity: 1,
+            y: 0,
+            transition: {
+              repeatType: 'loop',
+            },
+          }"
         />
       </UPageGrid>
     </ULandingSection>
 
     <ULandingSection
-      v-motion-slide-visible-left
       :title="page.pricing.title"
       :description="page.pricing.description"
       :headline="page.pricing.headline"
@@ -165,7 +176,6 @@ useSeoMeta({
     </ULandingSection>
 
     <ULandingSection
-      v-motion-slide-visible-right
       :headline="page.testimonials.headline"
       :title="page.testimonials.title"
       :description="page.testimonials.description"
@@ -178,6 +188,21 @@ useSeoMeta({
           v-for="(testimonial, index) in page.testimonials.items"
           :key="index"
           class="break-inside-avoid"
+          v-motion
+            :delay= "400 * index"
+            :initial="{
+              opacity: 0,
+              x: index < 3 ? -30 : 30,
+            }" 
+            :visible="{
+              opacity: 1,
+              x: 0,
+              transition: {
+                repeatType: 'loop',
+                stiffness: 100,
+                repeatDelay: 5000
+              },
+            }"
         >
           <ULandingTestimonial v-bind="testimonial" />
         </div>
@@ -185,10 +210,9 @@ useSeoMeta({
     </ULandingSection>
 
     <ULandingSection
-      v-motion-slide-visible-left
       class="bg-primary-50 dark:bg-primary-400 dark:bg-opacity-10"
     >
-      <ULandingCTA v-bind="page.cta" :card="false" />
+      <ULandingCTA v-bind="page.cta" :card="false"/>
     </ULandingSection>
 
     <ULandingSection
