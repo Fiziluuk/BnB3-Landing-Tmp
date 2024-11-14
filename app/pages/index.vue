@@ -216,7 +216,7 @@ useSeoMeta({
     </ULandingSection>
 
     <ULandingSection
-      v-motion-slide-visible-right
+      v-motion-slide-visible-top
       id="faq"
       :title="page.faq.title"
       :description="page.faq.description"
