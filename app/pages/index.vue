@@ -5,12 +5,23 @@ const { data: page } = await useAsyncData("index", () =>
   queryContent("/").findOne()
 );
 
-const wordArr = ["Bed", "Breakfast", "Bed & Breakfast"];
+definePageMeta({
+  colorMode: "dark",
+});
+const wordArr = [
+  "Build",
+  "Bump",
+  "Bullet",
+  "Bolster",
+  "Brew",
+  "Beyond",
+  "Belief",
+];
 
 const customersRef = ref();
 const ctaRef = ref();
 
-(function () {
+onMounted(() => {
   const { variant } = useMotion(customersRef, {
     initial: {
       x: 0,
@@ -37,13 +48,13 @@ const ctaRef = ref();
       },
     },
   });
-})();
+});
 
 useSeoMeta({
-  title: page.value.title,
-  ogTitle: page.value.title,
-  description: page.value.description,
-  ogDescription: page.value.description,
+  title: page.title,
+  ogTitle: page.title,
+  description: page.description,
+  ogDescription: page.description,
 });
 </script>
 
@@ -75,16 +86,11 @@ useSeoMeta({
           />
         </UBadge>
         <div class="flex justify-center pt-12">
-          <div>
-            <span class="text-7xl font-bold text-black">
-              <VueWriter :array="wordArr" />
-            </span>
-          </div>
-
-          <div>
-            <span class="text-7xl font-bold text-black">
-              {{ page.hero.title }}
-            </span>
+          <div
+            class="text-7xl font-bold text-primary-300 flex items-center space-x-4"
+          >
+            <div>Web3 Enthusiasts</div>
+            <VueWriter :array="wordArr" class="text-primary-700" />
           </div>
         </div>
       </template>
@@ -100,28 +106,28 @@ useSeoMeta({
         <div class="text-center font-black text-lg">{{ page.logos.title }}</div>
         <ULandingLogos align="center">
           <div
-            v-for="(icon,index) in page.logos.icons"
+            v-for="(icon, index) in page.logos.icons"
             v-motion
-            :delay= "400 * index"
+            :delay="400 * index"
             :initial="{
               opacity: 0,
               y: -90,
-            }" 
+            }"
             :visible="{
               opacity: 1,
               y: 0,
               transition: {
                 repeatType: 'loop',
-                repeatDelay: 5000
+                repeatDelay: 5000,
               },
             }"
           >
-          <UIcon
-            :key="icon"
-            :name="icon" 
-            class="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 text-gray-900 dark:text-white"
-          />
-        </div>
+            <UIcon
+              :key="icon"
+              :name="icon"
+              class="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 text-gray-900 dark:text-white"
+            />
+          </div>
         </ULandingLogos>
       </div>
     </ULandingHero>
@@ -141,11 +147,11 @@ useSeoMeta({
           :key="index"
           v-bind="item"
           v-motion
-          :delay= "200 * index"
+          :delay="200 * index"
           :initial="{
             opacity: 0,
             y: index < 3 ? -30 : 30,
-          }" 
+          }"
           :visible="{
             opacity: 1,
             y: 0,
@@ -158,6 +164,7 @@ useSeoMeta({
     </ULandingSection>
 
     <ULandingSection
+      v-if="false"
       :title="page.pricing.title"
       :description="page.pricing.description"
       :headline="page.pricing.headline"
@@ -189,20 +196,20 @@ useSeoMeta({
           :key="index"
           class="break-inside-avoid"
           v-motion
-            :delay= "400 * index"
-            :initial="{
-              opacity: 0,
-              x: index < 3 ? -30 : 30,
-            }" 
-            :visible="{
-              opacity: 1,
-              x: 0,
-              transition: {
-                repeatType: 'loop',
-                stiffness: 100,
-                repeatDelay: 5000
-              },
-            }"
+          :delay="400 * index"
+          :initial="{
+            opacity: 0,
+            x: index < 3 ? -30 : 30,
+          }"
+          :visible="{
+            opacity: 1,
+            x: 0,
+            transition: {
+              repeatType: 'loop',
+              stiffness: 100,
+              repeatDelay: 5000,
+            },
+          }"
         >
           <ULandingTestimonial v-bind="testimonial" />
         </div>
@@ -212,10 +219,11 @@ useSeoMeta({
     <ULandingSection
       class="bg-primary-50 dark:bg-primary-400 dark:bg-opacity-10"
     >
-      <ULandingCTA v-bind="page.cta" :card="false"/>
+      <ULandingCTA v-bind="page.cta" :card="false" />
     </ULandingSection>
 
     <ULandingSection
+      v-if="false"
       v-motion-slide-visible-top
       id="faq"
       :title="page.faq.title"
