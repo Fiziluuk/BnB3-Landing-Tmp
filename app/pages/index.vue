@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { useMotion } from "@vueuse/motion";
-import './index.css'
 
 const { data: page } = await useAsyncData("index", () =>
   queryContent("/").findOne()
 );
 
+const wordArr = ["Bed", "Breakfast", "Bed & Breakfast"];
+
 const customersRef = ref();
-const mainRef = ref();
+const ctaRef = ref();
 
 (function () {
   const { variant } = useMotion(customersRef, {
@@ -73,35 +74,54 @@ useSeoMeta({
             class="ml-1 w-4 h-4 pointer-events-none"
           />
         </UBadge>
-        <div class="text-7xl font-bold text-black pt-12 typing">
-          {{ page.hero.title }}
+        <div class="flex justify-center pt-12">
+          <div>
+            <span class="text-7xl font-bold text-black">
+              <VueWriter :array="wordArr" />
+            </span>
+          </div>
+
+          <div>
+            <span class="text-7xl font-bold text-black">
+              {{ page.hero.title }}
+            </span>
+          </div>
         </div>
       </template>
-
       <img
+        v-motion-pop-visible
         v-if="page.landingImg"
         :src="page.landingImg"
-        class="h-full w-full object-cover object-center rounded-xl"
+        class="h-full w-full object-cover object-center rounded-xl z-999"
       />
       <ImagePlaceholder v-else />
 
-      <!-- <ULandingLogos :title="page.logos.title" align="center" ref="contentRef">
-        <UIcon
-          v-for="icon in page.logos.icons"
-          :key="icon"
-          :name="icon"
-          class="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 text-gray-900 dark:text-white"
-        />
-      </ULandingLogos> -->
       <div class="pt-2">
         <div class="text-center font-black text-lg">{{ page.logos.title }}</div>
-        <ULandingLogos align="center" ref="customersRef">
+        <ULandingLogos align="center">
+          <div
+            v-for="(icon,index) in page.logos.icons"
+            v-motion
+            :delay= "400 * index"
+            :initial="{
+              opacity: 0,
+              y: -90,
+            }" 
+            :visible="{
+              opacity: 1,
+              y: 0,
+              transition: {
+                repeatType: 'loop',
+                repeatDelay: 5000
+              },
+            }"
+          >
           <UIcon
-            v-for="icon in page.logos.icons"
             :key="icon"
-            :name="icon"
+            :name="icon" 
             class="w-12 h-12 lg:w-16 lg:h-16 flex-shrink-0 text-gray-900 dark:text-white"
           />
+        </div>
         </ULandingLogos>
       </div>
     </ULandingHero>
@@ -120,12 +140,24 @@ useSeoMeta({
           v-for="(item, index) in page.features.items"
           :key="index"
           v-bind="item"
+          v-motion
+          :delay= "200 * index"
+          :initial="{
+            opacity: 0,
+            y: index < 3 ? -30 : 30,
+          }" 
+          :visible="{
+            opacity: 1,
+            y: 0,
+            transition: {
+              repeatType: 'loop',
+            },
+          }"
         />
       </UPageGrid>
     </ULandingSection>
 
     <ULandingSection
-      v-motion-slide-visible-left
       :title="page.pricing.title"
       :description="page.pricing.description"
       :headline="page.pricing.headline"
@@ -144,7 +176,6 @@ useSeoMeta({
     </ULandingSection>
 
     <ULandingSection
-      v-motion-slide-visible-right
       :headline="page.testimonials.headline"
       :title="page.testimonials.title"
       :description="page.testimonials.description"
@@ -157,6 +188,21 @@ useSeoMeta({
           v-for="(testimonial, index) in page.testimonials.items"
           :key="index"
           class="break-inside-avoid"
+          v-motion
+            :delay= "400 * index"
+            :initial="{
+              opacity: 0,
+              x: index < 3 ? -30 : 30,
+            }" 
+            :visible="{
+              opacity: 1,
+              x: 0,
+              transition: {
+                repeatType: 'loop',
+                stiffness: 100,
+                repeatDelay: 5000
+              },
+            }"
         >
           <ULandingTestimonial v-bind="testimonial" />
         </div>
@@ -164,14 +210,13 @@ useSeoMeta({
     </ULandingSection>
 
     <ULandingSection
-      v-motion-slide-visible-left
       class="bg-primary-50 dark:bg-primary-400 dark:bg-opacity-10"
     >
-      <ULandingCTA v-bind="page.cta" :card="false" />
+      <ULandingCTA v-bind="page.cta" :card="false"/>
     </ULandingSection>
 
     <ULandingSection
-      v-motion-slide-visible-right
+      v-motion-slide-visible-top
       id="faq"
       :title="page.faq.title"
       :description="page.faq.description"
